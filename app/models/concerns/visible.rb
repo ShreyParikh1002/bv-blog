@@ -14,6 +14,6 @@ module Visible
 	end
 
 	def archieved?
-		status == 'archived'
+		'archived' == status
 	end
 end
