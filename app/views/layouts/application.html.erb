@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Blog</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+	<head>
+		<title>Blog</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<%= csrf_meta_tags %>
+		<%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
+		<%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+		<%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+	</head>
 
-  <body>
-    <%= yield %>
-  </body>
+	<body>
+		<% if logged_in? %>
+			<%= button_to "Logout", sessions_path, method: :delete %>
+			<%= button_to "User Home", sessions_path,  method: :get %> 
+		<% else %>
+			<%= button_to "Register", new_user_path, method: :get %>
+			<%= button_to "Login", login_path, method: :get %>
+		<% end %>
+		<%= yield %>
+	</body>
 </html>
