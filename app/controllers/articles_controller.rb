@@ -1,8 +1,20 @@
 class ArticlesController < ApplicationController
-	http_basic_authenticate_with name: "dhh", password: "secret", except: [:index, :show]
+	before_action :pre_processing, only: [:update, :destroy, :edit]
+	before_action :owner?, only: [:update, :destroy, :edit]
+	before_action :authorized, only: [:new, :create]
 
-	def index
-		@articles = Article.all
+	def pre_processing
+		@user = User.find_by(id: session[:user_id])
+		if nil == @user
+			redirect_to login_path
+		end
+		@article = Article.find_by(id: params[:id])
+	end
+
+	def owner?
+		if @article.user_id != session[:user_id]
+			redirect_to error_path
+		end
 	end
 
 	def show
@@ -13,35 +25,35 @@ class ArticlesController < ApplicationController
 	end
 
 	def new
+		@user = User.find(session[:user_id])
 		@article = Article.new
 	end
 
 	def create
-		@article = Article.new(article_params)
+		@user = User.find(session[:user_id])
+		@article = @user.articles.create(article_params)
 		if @article.save
-			redirect_to @article
+			redirect_to user_path(@user)
 		else
+			puts "Article errors: #{@article.errors}"
 			render :new, status: :unprocessable_entity
 		end
 	end
 
 	def edit
-		@article = Article.find(params[:id])
 	end
 
 	def update
-		@article = Article.find(params[:id])
 		if @article.update(article_params)
-			redirect_to @article
+			redirect_to user_article_path(@user, @article)
 		else
 			render :edit, status: :unprocessable_entity
 		end
 	end
 
 	def destroy
-		@article = Article.find(params[:id])
 		@article.destroy
-		redirect_to root_path
+		redirect_to @user
 	end
 
 	def error_page

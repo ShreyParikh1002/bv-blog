@@ -4,9 +4,13 @@ Our blog has  <%= Article.public_count %> articles and counting!
 	<% @articles.each do |article| %>
 		<% unless article.archieved? %>
 			<li>
-				<%= link_to article.title, article %>
+				<%#=link_to article.title, user_article_path(article.user_id, article) %>
+				<%= article.title %>
 			</li>
+			<ul>
+				<%= article.body %>
+			</ul>
 		<% end %>
 	<% end %>
 </ul>
-<%= link_to "New Article", new_article_path %>
+<%#= link_to "New Article", new_article_path %>
