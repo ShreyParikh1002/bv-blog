@@ -3,23 +3,11 @@ class UsersController < ApplicationController
 		@articles = Article.all
 	end
 
-	def new 
-		@user = User.new
-	end
-
-	def create
-		@user = User.create(user_params)
-		if @user.valid?
-			@user.save
-			session[:user_id] = @user.id
-			redirect_to @user
-		else
-			render :new, status: :unprocessable_entity
-		end
-	end
-
 	def show
-		@user = User.find(params[:id])
+		@user = User.find_by(id: params[:id])
+		if @user.nil?
+      redirect_to error_path
+    end
 	end
 
 	private

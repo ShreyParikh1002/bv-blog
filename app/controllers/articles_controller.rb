@@ -1,18 +1,19 @@
 class ArticlesController < ApplicationController
 	before_action :pre_processing, only: [:update, :destroy, :edit]
 	before_action :owner?, only: [:update, :destroy, :edit]
-	before_action :authorized, only: [:new, :create]
+	before_action :authenticate_user!, only: [:new, :create]
 
 	def pre_processing
-		@user = User.find_by(id: session[:user_id])
+		@user = current_user
 		if nil == @user
-			redirect_to login_path
+			redirect_to new_user_session_path
 		end
 		@article = Article.find_by(id: params[:id])
 	end
 
 	def owner?
-		if @article.user_id != session[:user_id]
+		if @article.user_id != current_user.id
+			flash[:alert] = "You are not the owner of this article."
 			redirect_to error_path
 		end
 	end
@@ -20,17 +21,18 @@ class ArticlesController < ApplicationController
 	def show
 		@article = Article.find_by(id: params[:id])
 		if @article.nil?
+			flash[:alert] = "Article doesnt exist"
 			redirect_to error_path
 		end
 	end
 
 	def new
-		@user = User.find(session[:user_id])
+		@user = current_user
 		@article = Article.new
 	end
 
 	def create
-		@user = User.find(session[:user_id])
+		@user = current_user
 		@article = @user.articles.create(article_params)
 		if @article.save
 			redirect_to user_path(@user)
