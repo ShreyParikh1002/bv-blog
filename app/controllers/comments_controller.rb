@@ -1,13 +1,28 @@
 class CommentsController < ApplicationController
+	before_action :load_article, except: [:new, :create, :error_page]
+
+	def load_article
+		@article = Article.find_by(id: params[:id])
+		if @article.nil?
+			flash[:alert] = "Article doesn't exist"
+			redirect_to error_path
+		end
+	end
+
+	def load_comment
+		comment = @article.comments.find_by(params[:id])
+		if comment.nil?
+			flash[:alert] = "Comment doesn't exist"
+			redirect_to error_path
+		end
+	end
+
 	def create
-		@article = Article.find(params[:article_id])
-		comment = @article.comments.create(comment_params)
+		comment = @article.comments.create(comment_params.merge(user_id: current_user.id))
 		redirect_to article_path(@article)
 	end
 
 	def destroy
-		@article = Article.find(params[:article_id])
-		comment = @article.comments.find(params[:id])
 		comment.destroy
 		redirect_to article_path(@article)
 	end

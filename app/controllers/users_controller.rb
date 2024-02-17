@@ -6,8 +6,8 @@ class UsersController < ApplicationController
 	def show
 		@user = User.find_by(id: params[:id])
 		if @user.nil?
-      redirect_to error_path
-    end
+			redirect_to error_path
+		end
 	end
 
 	private
