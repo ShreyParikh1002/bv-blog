@@ -2,6 +2,7 @@
 <html>
 	<head>
 		<title>Blog</title>
+		<%= stylesheet_link_tag 'navbar' %>
 		<meta name="viewport" content="width=device-width,initial-scale=1">
 		<%= csrf_meta_tags %>
 		<%= csp_meta_tag %>
@@ -11,15 +12,18 @@
 	</head>
 
 	<body>
-		<%= button_to "Home", root_path, method: :get %>
-		<% if user_signed_in? %>
-			<%= button_to "Sign out", destroy_user_session_path, method: :delete %> 
-			<%= button_to "User Dashboard", user_path(current_user), method: :get %>
-		<% else %>
-			<%= button_to "Sign in", new_user_session_path %> 
-		<% end %>
-		<p class="notice"><%= notice %></p>
-		<p class="alert"><%= alert %></p>
+		<nav class="navbar">
+			<%= button_to "Home", root_path, method: :get %>
+			<%= button_to "Admin Login", new_admin_user_session_path, method: :get %> 
+			<% if user_signed_in? %>
+				<%= button_to "Sign out", destroy_user_session_path, method: :delete %> 
+				<%= button_to "User Dashboard", user_path(current_user), method: :get %>
+			<% else %>
+				<%= button_to "Sign in", new_user_session_path %> 
+			<% end %>
+			<p class="notice"><%= notice %></p>
+			<p class="alert"><%= alert %></p>
+		</nav>
 		<%= yield %>
 	</body>
 </html>

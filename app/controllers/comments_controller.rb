@@ -1,8 +1,8 @@
 class CommentsController < ApplicationController
-	before_action :load_article, except: [:new, :create, :error_page]
-
+	before_action :load_article
+	before_action :load_user
 	def load_article
-		@article = Article.find_by(id: params[:id])
+		@article = Article.find_by(id: params[:article_id])
 		if @article.nil?
 			flash[:alert] = "Article doesn't exist"
 			redirect_to error_path
@@ -17,8 +17,15 @@ class CommentsController < ApplicationController
 		end
 	end
 
+	def load_user
+		@user = current_user
+		if nil == @user
+			redirect_to new_user_session_path
+		end
+	end
+
 	def create
-		comment = @article.comments.create(comment_params.merge(user_id: current_user.id))
+		comment = @article.comments.create(comment_params.merge({:user_id => @user.id, :commenter => @user.email}))
 		redirect_to article_path(@article)
 	end
 
