@@ -14,10 +14,10 @@ class UsersController < ApplicationController
 	end
 
 	def display_active_plugins
-		url = URI.parse('http://127.0.1.1/site_1/?rest_route=/bvcount/v2/count')
-		http = Net::HTTP.new(url.host, url.port)
-		request = Net::HTTP::Get.new(url.request_uri)
-		@response = http.request(request)
+		uri = URI.parse("http://127.0.1.1/site_1/wp-load.php")
+		params = { 'api_call' => '1' }
+		uri.query = URI.encode_www_form(params)
+		@response = Net::HTTP.get_response(uri)
 	end
 
 end

@@ -5,16 +5,16 @@
  * Version: 1.0.0
  */
 
-function register_get_plugin_route(){
-	register_rest_route('bvcount/v2','/count', array(
-		'methods' => 'GET',
-		'callback' => 'return_active_plugins'
-	));
+function is_API_call() {
+	return '1' == $_GET['api_call'];
 }
 
 function return_active_plugins() {
 	$plugins = get_option('active_plugins');
-	return $plugins;
+	die (json_encode($plugins));
 }
-
-add_action('rest_api_init', 'register_get_plugin_route');
+add_action('init', function() {
+	if (is_API_call()) {
+		return_active_plugins();
+	}
+});
