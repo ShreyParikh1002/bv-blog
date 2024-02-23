@@ -19,4 +19,5 @@ class UsersController < ApplicationController
 		request = Net::HTTP::Get.new(url.request_uri)
 		@response = http.request(request)
 	end
+
 end
