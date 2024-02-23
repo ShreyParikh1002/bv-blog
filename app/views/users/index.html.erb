@@ -10,3 +10,14 @@ Our blog has  <%= Article.public_count %> articles and counting!
 	<% end %>
 </ul>
 <%#= link_to "New Article", new_article_path %>
+<% if '200' == @response.code %>
+	<% data = JSON.parse(@response.body) %>
+	<%= "Active plugins are" %>
+	<ul>
+		<% data.each do |plugin| %>
+			<li><%= plugin %></li>
+		<% end %>
+	</ul>
+<% else %>
+	<%= "Error: #{response.code} - #{response.message}" %>
+<% end %>

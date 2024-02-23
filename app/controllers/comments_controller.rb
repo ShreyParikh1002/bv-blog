@@ -25,7 +25,7 @@ class CommentsController < ApplicationController
 	end
 
 	def create
-		comment = @article.comments.create(comment_params.merge(user_id: @user.id, commenter: @user.email))
+		comment = @article.comments.create(comment_params.merge({:user_id => @user.id, :commenter => @user.email}))
 		redirect_to article_path(@article)
 	end
 

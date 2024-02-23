@@ -14,6 +14,7 @@ class AdminUsers::OmniauthCallbacksController < Devise::OmniauthCallbacksControl
 	alias_method :google_oauth2, :all
 
 	private
+
 	def auth_hash
 		request.env["omniauth.auth"]
 	end

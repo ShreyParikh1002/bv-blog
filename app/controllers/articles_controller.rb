@@ -60,7 +60,7 @@ class ArticlesController < ApplicationController
 	end
 
 	def owner?
-		if @article.user_id != current_user.id
+		if @article.user_id != @user.id
 			flash[:alert] = "You are not the owner of this article."
 			redirect_to error_path
 		end
