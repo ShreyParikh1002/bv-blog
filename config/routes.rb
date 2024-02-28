@@ -1,13 +1,15 @@
 Rails.application.routes.draw do
-	root "users#index"
+	devise_config = ActiveAdmin::Devise.config
+	devise_config[:controllers][:omniauth_callbacks] = 'admin_users/omniauth_callbacks'
+	devise_for :admin_users, devise_config
+	ActiveAdmin.routes(self)
+	devise_for :users
+
+	root to: "users#index"
 	resources :users do
-		resources :articles do
-			resources :comments
-		end
+	end
+	resources :articles do
+		resources :comments
 	end
 	get "/error", to: "articles#error_page"
-	get "/login", to: "sessions#new"
-	post "/sessions", to: "sessions#create"
-	delete "/sessions", to: "sessions#destroy"
-	get "/sessions", to: "sessions#show"
 end

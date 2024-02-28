@@ -10,14 +10,20 @@ Our blog has  <%= Article.public_count %> articles and counting!
 	<% end %>
 </ul>
 <%#= link_to "New Article", new_article_path %>
+<button onclick="window.location.reload();">Fetch plugins</button>
+<br>
 <% if '200' == @response.code %>
-	<% data = JSON.parse(@response.body) %>
-	<%= "Active plugins are" %>
-	<ul>
-		<% data.each do |plugin| %>
-			<li><%= plugin %></li>
-		<% end %>
-	</ul>
+	<% begin %>
+		<% data = JSON.parse(@response.body) %>
+		<%= "Active plugins are" %>
+		<ul>
+			<% data.each do |plugin| %>
+				<li><%= plugin %></li>
+			<% end %>
+		</ul>
+	<% rescue JSON::ParserError => e %>
+		<%= "Error: Plugin may be inactive unable to parse JSON response" %>
+	<% end %>
 <% else %>
 	<%= "Error: #{response.code} - #{response.message}" %>
 <% end %>
