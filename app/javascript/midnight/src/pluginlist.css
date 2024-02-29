@@ -1,0 +1,23 @@
+.pluginContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.error-message {
+    color: #dc3545;
+}
+
+.pluginList {
+    list-style: none;
+    padding: 0;
+}
+
+.pluginItem {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
