@@ -2,8 +2,13 @@ class UsersController < ApplicationController
 	require 'net/http'
 	require 'json'
 	def index
-		display_active_plugins
+		@plugins = display_active_plugins
 		@articles = Article.all
+		data = {
+  			plugins: @plugins.body,
+  			articles: @articles
+		}
+		render json: data
 	end
 
 	def show
